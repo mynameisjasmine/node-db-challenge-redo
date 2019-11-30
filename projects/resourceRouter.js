@@ -5,7 +5,7 @@ const router = express.Router();
 
 
 
-//GET resources
+//GET resources /api/resources
 router.get('/', (req, res) => {
     Resources.find()
     .then(resources => {
@@ -16,9 +16,10 @@ router.get('/', (req, res) => {
      });
     })
 
-//GET resources by ID
+//GET resources by ID /api/resources/:id
 router.get('/:id', (req, res) => {
-    Resources.findById()
+    const id = req.params.id
+    Resources.findById(id)
     .then(resource => {
     res.status(200).json(resource)   
     })
@@ -27,7 +28,7 @@ router.get('/:id', (req, res) => {
      });
     })
 
-//POST resources
+//POST resources /api/resources
 router.post('/', (req, res) => {
     const { name } = req.body
     if (!name) {

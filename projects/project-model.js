@@ -7,6 +7,7 @@ module.exports = {
   findById,
   add,
   addTask,
+  getTasks,
   update,
   remove  
 };
@@ -23,6 +24,7 @@ function findById(id) {
 
 
 function add(project) {
+  console.log('inside add project', project);
  return db('projects') 
  .insert(project)
  .then(id => {
@@ -32,12 +34,28 @@ function add(project) {
 
 function addTask(task, id) {
   return db('tasks')
-  .where({task_id: id}) 
+  .where({projectId: id}) 
   .insert(task)
   .then(id => {
   return findById(id[0])
     });  
   }
+
+//   function getTasks(id) {
+//     return db('tasks')
+//     .where({ id: Number(id) })
+//  .first()
+//     }
+
+    function getTasks(id) {
+      return db('tasks as t')
+      .join('projects as p')
+      // .select('t.id', 'p.id', 't.description' )
+      .select('t.id', 't.description', 't.completed' )
+      .where('t.projectId', id)
+      .where('p.id', id)
+   
+      }
 
 
 function update(changes, id) {
